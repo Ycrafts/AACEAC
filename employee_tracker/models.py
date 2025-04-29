@@ -16,7 +16,7 @@ class Division(models.Model):
         return self.name
 
 class SectorSubdivisionType(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.name
@@ -89,9 +89,9 @@ class EmployeeRole(models.Model):
 
 class Employee(models.Model):
     fname = models.CharField(max_length=255)
-    mname = models.TextField(max_length=255)
-    lname = models.TextField(max_length=255)
-    phone_no = models.TextField(max_length=50)
+    mname = models.CharField(max_length=255)
+    lname = models.CharField(max_length=255)
+    phone_no = models.CharField(max_length=50)
     organizationalunit = models.ForeignKey(OrganizationalUnit, on_delete=models.PROTECT)
     role = models.ForeignKey(EmployeeRole, on_delete=models.PROTECT, null=True, blank=True)
 
