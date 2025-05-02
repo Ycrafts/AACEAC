@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ValidationError
 
 class Division(models.Model):
     class DivisionType(models.TextChoices):
@@ -21,13 +22,11 @@ class SectorSubdivisionType(models.Model):
     def __str__(self):
         return self.name
 
-
 class Subcity(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name
-
 
 class SubcitySubdivisionType(models.Model):
     class SubcityType(models.TextChoices):
@@ -41,7 +40,6 @@ class SubcitySubdivisionType(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class Woreda(models.Model):
     name = models.CharField(max_length=50)
@@ -67,11 +65,17 @@ class OrganizationalUnit(models.Model):
     subcity = models.ForeignKey(Subcity, on_delete=models.PROTECT, null=True, blank=True)
     woreda = models.ForeignKey(Woreda, on_delete=models.PROTECT, null=True, blank=True)
 
+    def clean(self):
+            super().clean()
+            if self.sector_subdiv_type is not None and self.subcity_subdiv_type is not None:
+                raise ValidationError(
+                    "Sector Subdivision Type and Subcity Subdivision Type are mutually exclusive. You cannot select both."
+                )
+                
     def __str__(self):
         return self.name
-
-
-class EmployeeRole(models.Model):
+    
+class EmployeeRole(models.Model): 
     class RoleType(models.TextChoices):
         DIRECTOR = 'Director', 'Director'
         # LEADER = 'Subcity', 'Subcity' 
@@ -85,7 +89,6 @@ class EmployeeRole(models.Model):
 
     def __str__(self):
         return self.role
-
 
 class Employee(models.Model):
     fname = models.CharField(max_length=255)
