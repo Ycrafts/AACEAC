@@ -4,13 +4,14 @@ from .models import *
 from .serializers import *
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
-
+from django.db.models.deletion import ProtectedError
+from rest_framework import status
+from rest_framework.response import Response
 
 class Pagination(PageNumberPagination):
-    page_size = 10  # Number of items per page
-    page_size_query_param = 'page_size'  # Allow clients to specify the page size via the URL
-    max_page_size = 100  # Set a limit for the maximum page size
-
+    page_size = 10  # items per page
+    page_size_query_param = 'page_size' 
+    max_page_size = 100
 
 class SectorSubdivisionTypeViewSet(viewsets.ModelViewSet):
     queryset = SectorSubdivisionType.objects.all().order_by('name')
@@ -18,14 +19,31 @@ class SectorSubdivisionTypeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     filter_backends = (SearchFilter,)
     search_fields = ['name'] 
+    def destroy(self, request, *args, **kwargs):
+        try:
+            return super().destroy(request, *args, **kwargs)
+        except ProtectedError:
+            return Response(
+                {"detail": "This sector subdivision type cannot be deleted because it is referenced by other data (e.g., Woredas)."},
+                status=status.HTTP_409_CONFLICT
+            )
 
+    
 class SubcityViewSet(viewsets.ModelViewSet):
     queryset = Subcity.objects.all().order_by('name')
     serializer_class = SubcitySerializer
     permission_classes = [IsAuthenticated]
-    pagination_class = Pagination
     filter_backends = (SearchFilter,)
     search_fields = ['name'] 
+    
+    def destroy(self, request, *args, **kwargs):
+        try:
+            return super().destroy(request, *args, **kwargs)
+        except ProtectedError:
+            return Response(
+                {"detail": "This subcity cannot be deleted because it is referenced by other data (e.g., Woredas)."},
+                status=status.HTTP_409_CONFLICT
+            )
 
 class WoredaViewSet(viewsets.ModelViewSet):
     queryset = Woreda.objects.all().order_by('name')
@@ -45,6 +63,15 @@ class OrganizationalUnitViewSet(viewsets.ModelViewSet):
     pagination_class = Pagination
     filter_backends = (SearchFilter,)
     search_fields = ['name', 'division__name','sector_subdiv_type__name','subcity__name','woreda__name'] 
+    
+    def destroy(self, request, *args, **kwargs):
+        try:
+            return super().destroy(request, *args, **kwargs)
+        except ProtectedError:
+            return Response(
+                {"detail": "This organizational unit cannot be deleted because it is referenced by other data (e.g., other organizational units)."},
+                status=status.HTTP_409_CONFLICT
+            )
 
 class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.select_related('organizationalunit', 'role')
