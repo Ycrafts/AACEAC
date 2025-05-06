@@ -66,11 +66,27 @@ class OrganizationalUnit(models.Model):
     woreda = models.ForeignKey(Woreda, on_delete=models.PROTECT, null=True, blank=True)
 
     def clean(self):
-            super().clean()
-            if self.sector_subdiv_type is not None and self.subcity_subdiv_type is not None:
-                raise ValidationError(
-                    "Sector Subdivision Type and Subcity Subdivision Type are mutually exclusive. You cannot select both."
-                )
+        super().clean()
+        if self.sector_subdiv_type is not None and self.subcity_subdiv_type is not None:
+            raise ValidationError(
+                "Sector Subdivision Type and Subcity Subdivision Type are mutually exclusive. You cannot select both."
+            )
+    
+    def save(self, *args, **kwargs):
+        # If this unit has a parent, inherit the fields if they're not set
+        if self.parent:
+            if not self.division:
+                self.division = self.parent.division
+            if not self.sector_subdiv_type:
+                self.sector_subdiv_type = self.parent.sector_subdiv_type
+            if not self.subcity_subdiv_type:
+                self.subcity_subdiv_type = self.parent.subcity_subdiv_type
+            if not self.subcity:
+                self.subcity = self.parent.subcity
+            if not self.woreda:
+                self.woreda = self.parent.woreda
+        
+        super().save(*args, **kwargs)
                 
     def __str__(self):
         return self.name

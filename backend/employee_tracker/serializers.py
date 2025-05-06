@@ -100,10 +100,9 @@ class OrganizationalUnitSerializer(serializers.ModelSerializer):
             return obj.parent.name
         return None
 
-
 class EmployeeSerializer(serializers.ModelSerializer):
-    organizationalunit_name = serializers.CharField(source='organizationalunit.name')
-    role_name = serializers.CharField(source='role.role')
+    organizationalunit_name = serializers.CharField(source='organizationalunit.name', read_only=True)  # Add read_only=True
+    role_name = serializers.CharField(source='role.role', read_only=True)  # Add read_only=True
 
     class Meta:
         model = Employee
@@ -112,6 +111,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
             'organizationalunit', 'organizationalunit_name',
             'role', 'role_name'
         ]
+        read_only_fields = ['organizationalunit_name', 'role_name']  # Add this line
 
 class EmployeeRoleSerializer(serializers.ModelSerializer):
     class Meta:
