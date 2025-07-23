@@ -59,7 +59,7 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 1.  Clone the repository:
     ```sh
-    git clone https://github.com/your-username/AACEAC.git
+    git clone https://github.com/Ycrafts/AACEAC.git
     cd AACEAC/AACEAC
     ```
 2.  Create and activate a virtual environment:
@@ -117,8 +117,6 @@ The backend exposes the following API endpoints under the `/api/` prefix. All en
   - `divisions/`
 
 ## Screenshots
-
-*(Add screenshots of your application here)*
 
 ### Login Page
 ![Login Page](./screenshots/Screenshot%202025-06-22%20130343.png)
