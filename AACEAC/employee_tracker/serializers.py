@@ -109,7 +109,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'fname', 'mname', 'lname', 'phone_no',
             'organizationalunit', 'organizationalunit_name',
-            'role', 'role_name'
+            'role', 'role_name', 'status'
         ]
         read_only_fields = ['organizationalunit_name', 'role_name']  # Add this line
 

@@ -175,6 +175,7 @@ class Employee(models.Model):
     phone_no = models.CharField(max_length=50, unique=True)
     organizationalunit = models.ForeignKey(OrganizationalUnit, on_delete=models.PROTECT)
     role = models.ForeignKey(EmployeeRole, on_delete=models.PROTECT, null=True, blank=True)
+    status = models.CharField(max_length=20, default="Active")
 
     def __str__(self):
         return f"{self.fname} {self.mname}"
