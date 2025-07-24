@@ -188,3 +188,7 @@ export const deleteEmployee = async (id) => {
 export const getAllEmployeeRoles = async () => {
   return api.get('/employee-roles/');
 };
+
+export const getAnalysisReport = async () => {
+  return api.get('/analysis-report/');
+};

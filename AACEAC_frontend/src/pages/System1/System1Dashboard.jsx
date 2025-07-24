@@ -75,10 +75,10 @@ function System1Dashboard() {
 
   const analysisLinks = [
     {
+      to : 'analysis-report',
       label: 'Analysis Report 1',
       icon: ChartBarIcon,
-      description: 'Detailed analysis reports (Coming Soon)',
-      comingSoon: true,
+      description: 'Detailed analysis reports',
       color: 'slate'
     },
     {
@@ -166,32 +166,26 @@ function System1Dashboard() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {analysisLinks.map((link, index) => (
-                  <div
-                    key={index}
-                    className="group relative bg-white dark:bg-slate-800 rounded-xl shadow-sm overflow-hidden border border-slate-100 dark:border-slate-700"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-900/50"></div>
-                    <div className="relative p-6">
-                      <div className="flex items-center space-x-4">
-                        <div className="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">
-                          <link.icon className="h-6 w-6 text-slate-800 dark:text-slate-100" />
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-semibold text-slate-400 dark:text-slate-500">
-                            {link.label}
-                          </h3>
-                          <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">{link.description}</p>
-                        </div>
+                  <Link
+                  key={link.to}
+                  to={link.to}
+                  className={`group relative bg-white dark:bg-slate-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-slate-100 dark:border-slate-700`}
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-r from-${link.color}-50 to-${link.color}-100 dark:from-${link.color}-900/20 dark:to-${link.color}-800/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
+                  <div className="relative p-6">
+                    <div className="flex items-center space-x-4">
+                      <div className="p-3 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg group-hover:bg-indigo-200 dark:group-hover:bg-indigo-800/50 transition-all duration-300 transform group-hover:scale-110 group-hover:shadow-lg group-hover:-translate-y-1">
+                        <link.icon className="h-6 w-6 text-slate-800 dark:text-slate-100" />
                       </div>
-                      {link.comingSoon && (
-                        <div className="absolute top-3 right-3">
-                          <span className="px-2 py-1 text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 rounded-full border border-slate-200 dark:border-slate-600">
-                            Coming Soon
-                          </span>
-                        </div>
-                      )}
+                      <div>
+                        <h3 className={`text-lg font-semibold text-slate-800 dark:text-slate-100 group-hover:text-${link.color}-700 dark:group-hover:text-${link.color}-400 transition-colors duration-300`}>
+                          {link.label}
+                        </h3>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{link.description}</p>
+                      </div>
                     </div>
                   </div>
+                  </Link>
                 ))}
               </div>
             </div>

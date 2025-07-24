@@ -11,6 +11,7 @@ import SubcityListPage from './pages/System1/SubcityListPage';
 import WoredaListPage from './pages/System1/WoredaListPage';
 import OrganizationalUnitListPage from './pages/System1/OrganizationalUnitListPage';
 import EmployeeListPage from './pages/System1/EmployeeListPage';
+import AnalysisReportPage from './pages/System1/AnalysisReportPage';
 
 
 function App() {
@@ -74,11 +75,12 @@ function App() {
             path="employees" // Relative path
             element={<EmployeeListPage />}
           />
-
+          <Route path="analysis-report" element={<AnalysisReportPage />} />
           {/* Add nested routes for System 2, 3, 4 later as needed */}
            {/* <Route path="system2/*" element={<System2Dashboard />} /> */}
         </Route>
 
+        
 
         {/* Optional: Redirect any unmatched routes to home or login */}
         <Route path="*" element={<Navigate to={token ? "/" : "/login"} replace />} />
