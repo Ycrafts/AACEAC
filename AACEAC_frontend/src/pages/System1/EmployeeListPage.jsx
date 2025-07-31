@@ -197,7 +197,8 @@ function EmployeeListPage() {
         lname: '',
         phone_no: '',
         organizationalunit: '',
-        role: ''
+        role: '',
+        status: 'Active'
     });
 
     // Dropdown data state
@@ -326,7 +327,8 @@ function EmployeeListPage() {
             lname: '',
             phone_no: '',
             organizationalunit: '',
-            role: ''
+            role: '',
+            status: 'Active'
         });
     };
 
@@ -340,7 +342,8 @@ function EmployeeListPage() {
                 lname: formData.lname,
                 phone_no: formData.phone_no,
                 organizationalunit: parseInt(formData.organizationalunit), // Just the ID
-                role: formData.role ? parseInt(formData.role) : null // Role is optional
+                role: formData.role ? parseInt(formData.role) : null, // Role is optional
+                status: formData.status
             };
             console.log('Submitting form data:', cleanFormData);
             await createEmployee(cleanFormData);
@@ -366,7 +369,8 @@ function EmployeeListPage() {
             lname: employee.lname,
             phone_no: employee.phone_no,
             organizationalunit: employee.organizationalunit,
-            role: employee.role
+            role: employee.role,
+            status: employee.status || 'Active'
         });
     };
 
@@ -380,7 +384,8 @@ function EmployeeListPage() {
                 lname: formData.lname,
                 phone_no: formData.phone_no,
                 organizationalunit: parseInt(formData.organizationalunit), // Just the ID
-                role: formData.role ? parseInt(formData.role) : null // Role is optional
+                role: formData.role ? parseInt(formData.role) : null, // Role is optional
+                status: formData.status
             };
             console.log('Submitting form data:', cleanFormData);
             await updateEmployee(currentEditItem.id, cleanFormData);
@@ -541,6 +546,19 @@ function EmployeeListPage() {
                                             ))}
                                         </select>
                                     </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Status</label>
+                                        <select
+                                            name="status"
+                                            value={formData.status || 'Active'}
+                                            onChange={handleInputChange}
+                                            className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-md bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400"
+                                            required
+                                        >
+                                            <option value="Active"> Active</option>
+                                            <option value="Resigned"> Resigned</option>
+                                        </select>
+                                    </div>
                                     <div className="flex justify-end space-x-4 pt-2">
                                         <button type="submit" className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors duration-200">Save</button>
                                         <button type="button" onClick={() => setShowCreateForm(false)} className="px-4 py-2 bg-gray-300 dark:bg-slate-700 text-gray-800 dark:text-slate-200 rounded-md transition-colors duration-200">Cancel</button>
@@ -638,6 +656,19 @@ function EmployeeListPage() {
                                             {employeeRoles.map(role => (
                                                 <option key={role.id} value={role.id}>{role.role}</option>
                                             ))}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Status</label>
+                                        <select
+                                            name="status"
+                                            value={formData.status || 'Active'}
+                                            onChange={handleInputChange}
+                                            className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-md bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400"
+                                            required
+                                        >
+                                            <option value="Active">1. Active</option>
+                                            <option value="Resigned">2. Resigned</option>
                                         </select>
                                     </div>
                                     <div className="flex justify-end space-x-4 pt-2">

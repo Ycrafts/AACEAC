@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { getWoredas, getOrganizationalUnits } from '../../api';
+import { getWoredas, getOrganizationalUnits, getEmployees } from '../../api';
 
 const AnalysisReportPage = () => {
   const [woredaCount, setWoredaCount] = useState(0);
   const [orgUnitCount, setOrgUnitCount] = useState(0);
+  const [activeEmployeesCount, setActiveEmployeesCount] = useState(0);
+  const [resignedEmployeesCount, setResignedEmployeesCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -12,16 +14,30 @@ const AnalysisReportPage = () => {
       setLoading(true);
       setError(null);
       try {
+        // Fetch woredas and organizational units for counts
         const [woredaRes, orgUnitRes] = await Promise.all([
           getWoredas(1, 1),
           getOrganizationalUnits(1, 1)
         ]);
         setWoredaCount(woredaRes.data.count);
         setOrgUnitCount(orgUnitRes.data.count);
+
+        // Fetch all employees to count by status
+        const employeesRes = await getEmployees(1, 1000); // Get a large number to fetch all employees
+        const employees = employeesRes.data.results || employeesRes.data;
+        
+        // Count active and resigned employees
+        const activeCount = employees.filter(emp => emp.status === "Active").length;
+        const resignedCount = employees.filter(emp => emp.status === "Resigned").length;
+        
+        setActiveEmployeesCount(activeCount);
+        setResignedEmployeesCount(resignedCount);
       } catch (err) {
         setError('Failed to fetch counts.');
         setWoredaCount(0);
         setOrgUnitCount(0);
+        setActiveEmployeesCount(0);
+        setResignedEmployeesCount(0);
       } finally {
         setLoading(false);
       }
@@ -56,11 +72,11 @@ const AnalysisReportPage = () => {
               </tr>
               <tr>
                 <td className="px-6 py-4 font-medium">Active Employees</td>
-                <td className="px-6 py-4"></td>
+                <td className="px-6 py-4">{activeEmployeesCount}</td>
               </tr>
               <tr>
                 <td className="px-6 py-4 font-medium">Resigned Employees</td>
-                <td className="px-6 py-4"></td>
+                <td className="px-6 py-4">{resignedEmployeesCount}</td>
               </tr>
             </tbody>
           </table>
